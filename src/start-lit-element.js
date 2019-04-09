@@ -12,6 +12,7 @@
 // Import LitElement base class and html helper function
 import { LitElement, html } from 'lit-element';
 //import { LazyElement } from './lazy-element.js';
+import { ListApp } from './list-app.js';
 
 export class StartLitElement extends LitElement {
   /**
@@ -23,7 +24,11 @@ export class StartLitElement extends LitElement {
       message: { type: String },
       pie: { type: Boolean },
       array: { type: Array },
-      class: { type: String }
+      class: { type: String },
+      controlButton: { type: Boolean },
+      valorInput: { type: String },
+      contadorList: { type: Number },
+      lista: { type: Array }
     };
   }
 
@@ -40,6 +45,12 @@ export class StartLitElement extends LitElement {
     this.pie = false;
     this.array = ['Hola', 'Buenas', 'Adiós'];
     this.class = '';
+    
+    this.controlButton = false;
+    this.valorInput;
+
+    this.contadorList = 0;
+    this.lista = new Array('Item 1', 'Item 2', 'Item 3');
   }
 
   /**
@@ -61,7 +72,7 @@ export class StartLitElement extends LitElement {
     return html`
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
       <style>
-        :host { display: block; }
+        :host { display: block; font-family: 'Arial', sans-serif; }
         :host([hidden]) { display: none; }
       </style>
 
@@ -92,6 +103,18 @@ export class StartLitElement extends LitElement {
             ${this.array.map(i => html`<li>${i}</li>`)}
           </ul>
         </lazy-element>
+        <hr>
+      ` : html``}
+
+      <form class="form-inline" onsubmit="console.log('Item added!');return false">
+        <input class="form-control mx-1" name="nombre" id="nombre" type="text" placeholder="Add text...">
+        <button class="btn btn-success mx-1" @click="${this.addValor}">+ Add #${this.lista ? this.lista.length : '0'}</button>
+      </form>
+      
+      ${this.lista ? html`
+        <list-app class="p-1">
+          ${this.lista.map(i => html`<li>${i}</li>`)}
+        </list-app>
       ` : html``}
     `;
   }
@@ -116,6 +139,18 @@ export class StartLitElement extends LitElement {
   togglePie(e) {
     this.pie = !this.pie;
     this.loadLazy();
+  }
+  addValor(e) {
+    let item = this.shadowRoot.getElementById('nombre').value;
+    if(item != ''){
+      this.lista.push(item);
+      console.table(this.lista);
+      this.shadowRoot.getElementById('nombre').value = '';
+    }
+    else{
+      e.preventDefault();
+      console.log('Add some item!');
+    }
   }
 
   /**
