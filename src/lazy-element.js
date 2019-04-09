@@ -22,7 +22,7 @@ export class LazyElement extends LitElement {
         :host { display: block; }
         :host([hidden]) { display: none; }
       </style>
-      <p>You like pie.</p>
+      <slot></slot>
     `;
   }
 }

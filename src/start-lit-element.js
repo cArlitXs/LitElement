@@ -11,6 +11,7 @@
 
 // Import LitElement base class and html helper function
 import { LitElement, html } from 'lit-element';
+//import { LazyElement } from './lazy-element.js';
 
 export class StartLitElement extends LitElement {
   /**
@@ -20,7 +21,9 @@ export class StartLitElement extends LitElement {
   static get properties() {
     return {
       message: { type: String },
-      pie: { type: Boolean }
+      pie: { type: Boolean },
+      array: { type: Array },
+      class: { type: String }
     };
   }
 
@@ -35,14 +38,28 @@ export class StartLitElement extends LitElement {
     this.loadComplete = false;
     this.message = 'Hello World from LitElement';
     this.pie = false;
+    this.array = ['Hola', 'Buenas', 'Adiós'];
+    this.class = '';
   }
 
   /**
    * Define a template for the new element by implementing LitElement's
    * `render` function. `render` must return a lit-html TemplateResult.
    */
+
+  /*
+    Text content: <p>${...}</p>
+    Attribute: <p id="${...}"></p>
+    Boolean attribute: ?checked="${...}"
+    Property: .value="${...}"
+    Event handler: @event="${...}"
+    ${...} sirve para bindear con el contructor
+    @click="${this.clickHandler}" bindea evento click
+    <slot> aqui se envia el hijo del componente
+  */
   render() {
     return html`
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
       <style>
         :host { display: block; }
         :host([hidden]) { display: none; }
@@ -51,14 +68,31 @@ export class StartLitElement extends LitElement {
       <h1>Start LitElement!</h1>
       <p>${this.message}</p>
 
+      ${this.pie ? html`
+        <button class="btn btn-danger" @click="${this.togglePie}">&times; Close</button>
+      ` : html`
+        <button class="btn btn-success" @click="${this.togglePie}">+ Open</button>
+      `}
+
+      <hr>
+      
       <input name="myinput" id="myinput" 
-        type="checkbox"
-        ?checked="${this.pie}"
-        @change="${this.togglePie}">
+      type="checkbox"
+      ?checked="${this.pie}"
+      @change="${this.togglePie}">
 
       <label for="myinput">I like pie.</label>
-      
-      ${this.pie ? html`<lazy-element></lazy-element>` : html``}
+
+      <hr>
+
+      ${this.pie ? html`
+        <lazy-element class="border border-success rounded-lg p-3">
+          <p>You like pie.</p>
+          <ul>
+            ${this.array.map(i => html`<li>${i}</li>`)}
+          </ul>
+        </lazy-element>
+      ` : html``}
     `;
   }
 
