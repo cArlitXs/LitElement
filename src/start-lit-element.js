@@ -72,6 +72,33 @@ export class StartLitElement extends LitElement {
     ${...} sirve para bindear con el contructor
     @click="${this.clickHandler}" bindea evento click
     <slot> aqui se envia el hijo del componente
+    
+    //
+    Bind to text content
+    Bind prop1 to text content:
+    html`<div>${this.prop1}</div>`
+
+    //
+    Bind to an attribute
+    Bind prop2 to an attribute:
+    html`<div id="${this.prop2}"></div>`
+    Attribute values are always strings, so an attribute binding should return a value that can be converted into a string.
+
+    //
+    Bind to a boolean attribute
+    Bind prop3 to a boolean attribute:
+    html`<input type="checkbox" ?checked="${this.prop3}">i like pie</input>`
+    Boolean attributes are added if the expression evaluates to a truthy value, and removed if it evaluates to a falsy value.
+
+    //
+    Bind to a property
+    Bind prop4 to a property:
+    html`<input type="checkbox" .value="${this.prop4}"/>`
+
+    //
+    Bind to an event handler
+    Bind clickHandler to a click event:
+    html`<button @click="${this.clickHandler}">pie?</button>`
   */
   render() {
     return html`
