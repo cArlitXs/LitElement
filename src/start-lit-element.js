@@ -28,7 +28,12 @@ export class StartLitElement extends LitElement {
       controlButton: { type: Boolean },
       valorInput: { type: String },
       contadorList: { type: Number },
-      lista: { type: Array }
+      lista: { type: Array },
+      added:{
+        type: Boolean,
+        value: false,
+        observer: 'addedChanged'
+      },
     };
   }
 
@@ -50,7 +55,7 @@ export class StartLitElement extends LitElement {
     this.valorInput;
 
     this.contadorList = 0;
-    this.lista = new Array('Item 1', 'Item 2', 'Item 3');
+    this.lista = new Array();
   }
 
   /**
@@ -82,7 +87,7 @@ export class StartLitElement extends LitElement {
       ${this.pie ? html`
         <button class="btn btn-danger" @click="${this.togglePie}">&times; Close</button>
       ` : html`
-        <button class="btn btn-success" @click="${this.togglePie}">+ Open</button>
+        <button class="btn btn-primary" @click="${this.togglePie}">+ Open</button>
       `}
 
       <hr>
@@ -106,9 +111,9 @@ export class StartLitElement extends LitElement {
         <hr>
       ` : html``}
 
-      <form class="form-inline" onsubmit="console.log('Item added!');return false">
-        <input class="form-control mx-1" name="nombre" id="nombre" type="text" placeholder="Add text...">
-        <button class="btn btn-success mx-1" @click="${this.addValor}">+ Add #${this.lista ? this.lista.length : '0'}</button>
+      <form class="form-inline">
+        <input class="form-control m-1" name="nombre" id="nombre" type="text" placeholder="Add text...">
+        <button class="btn btn-success m-1" @click="${this.addValor}">+ Add #${this.lista ? this.lista.length : '0'}</button>
       </form>
       
       ${this.lista ? html`
@@ -118,7 +123,6 @@ export class StartLitElement extends LitElement {
       ` : html``}
     `;
   }
-
   /**
    * Implement firstUpdated to perform one-time work on first update:
    * - Call a method to load the lazy element if necessary
@@ -141,15 +145,27 @@ export class StartLitElement extends LitElement {
     this.loadLazy();
   }
   addValor(e) {
+    e.preventDefault();
     let item = this.shadowRoot.getElementById('nombre').value;
     if(item != ''){
-      this.lista.push(item);
+      this.lista.push(item.charAt(0).toUpperCase() + item.slice(1));
+      this.added = true;
       console.table(this.lista);
+      console.log('%cItem added!', 'color: green');
       this.shadowRoot.getElementById('nombre').value = '';
+      this.added = false;
     }
     else{
-      e.preventDefault();
-      console.log('Add some item!');
+      console.log('%cAdd some item!', 'color: red');
+    }
+  }
+
+  addedChanged(added){
+    if(added){
+      console.log('%cObserver working!', 'color: green');
+    }
+    else{
+      console.log('%cObserver not working!', 'color: red');
     }
   }
 
@@ -162,10 +178,10 @@ export class StartLitElement extends LitElement {
     if(this.pie && !this.loadComplete) {
       return import('./lazy-element.js').then((LazyElement) => {
         this.loadComplete = true;
-        console.log("LazyElement loaded");
+        console.log("%cLazyElement loaded", 'color: green');
       }).catch((reason) => {
         this.loadComplete = false;
-        console.log("LazyElement failed to load", reason);
+        console.log("%cLazyElement failed to load", 'color: red', reason);
       });
     }
   }

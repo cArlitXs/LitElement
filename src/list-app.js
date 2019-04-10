@@ -5,7 +5,6 @@ export class ListApp extends LitElement {
     return html`
       <style>
         :host { display: block; }
-        :host([hidden]) { display: none; }
       </style>
       <ul>
           <slot></slot>
