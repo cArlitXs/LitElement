@@ -12,7 +12,7 @@
 // Import LitElement base class and html helper function
 import { LitElement, html } from 'lit-element';
 //import { LazyElement } from './lazy-element.js';
-import { ListApp } from './list-app.js';
+import './list-app.js';
 
 export class StartLitElement extends LitElement {
   /**
@@ -62,44 +62,6 @@ export class StartLitElement extends LitElement {
    * Define a template for the new element by implementing LitElement's
    * `render` function. `render` must return a lit-html TemplateResult.
    */
-
-  /*
-    Text content: <p>${...}</p>
-    Attribute: <p id="${...}"></p>
-    Boolean attribute: ?checked="${...}"
-    Property: .value="${...}"
-    Event handler: @event="${...}"
-    ${...} sirve para bindear con el contructor
-    @click="${this.clickHandler}" bindea evento click
-    <slot> aqui se envia el hijo del componente
-    
-    //
-    Bind to text content
-    Bind prop1 to text content:
-    html`<div>${this.prop1}</div>`
-
-    //
-    Bind to an attribute
-    Bind prop2 to an attribute:
-    html`<div id="${this.prop2}"></div>`
-    Attribute values are always strings, so an attribute binding should return a value that can be converted into a string.
-
-    //
-    Bind to a boolean attribute
-    Bind prop3 to a boolean attribute:
-    html`<input type="checkbox" ?checked="${this.prop3}">i like pie</input>`
-    Boolean attributes are added if the expression evaluates to a truthy value, and removed if it evaluates to a falsy value.
-
-    //
-    Bind to a property
-    Bind prop4 to a property:
-    html`<input type="checkbox" .value="${this.prop4}"/>`
-
-    //
-    Bind to an event handler
-    Bind clickHandler to a click event:
-    html`<button @click="${this.clickHandler}">pie?</button>`
-  */
   render() {
     return html`
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -216,3 +178,140 @@ export class StartLitElement extends LitElement {
 
 // Register the element with the browser
 customElements.define('start-lit-element', StartLitElement);
+
+
+//Apuntes
+/*
+  Text content: <p>${...}</p>
+  Attribute: <p id="${...}"></p>
+  Boolean attribute: ?checked="${...}"
+  Property: .value="${...}"
+  Event handler: @event="${...}"
+  ${...} sirve para bindear con el contructor
+  @click="${this.clickHandler}" bindea evento click
+  <slot> aqui se envia el hijo del componente
+  
+  //
+  Bind to text content
+  Bind prop1 to text content:
+  html`<div>${this.prop1}</div>`
+
+  //
+  Bind to an attribute
+  Bind prop2 to an attribute:
+  html`<div id="${this.prop2}"></div>`
+  Attribute values are always strings, so an attribute binding should return a value that can be converted into a string.
+
+  //
+  Bind to a boolean attribute
+  Bind prop3 to a boolean attribute:
+  html`<input type="checkbox" ?checked="${this.prop3}">i like pie</input>`
+  Boolean attributes are added if the expression evaluates to a truthy value, and removed if it evaluates to a falsy value.
+
+  //
+  Bind to a property
+  Bind prop4 to a property:
+  html`<input type="checkbox" .value="${this.prop4}"/>`
+
+  //
+  Bind to an event handler
+  Bind clickHandler to a click event:
+  html`<button @click="${this.clickHandler}">pie?</button>`
+
+  //
+  <p slot="one">Content</p>   -----Go to---->   <slot name="one"></slot>
+
+  //
+  Example template
+  class MyPage extends LitElement {
+    render() {
+      return html`
+        ${this.headerTemplate}
+        ${this.articleTemplate}
+        ${this.footerTemplate}
+      `;
+    }
+    get headerTemplate() {
+      return html`<header>header</header>`;
+    }
+    get articleTemplate() {
+      return html`<article>article</article>`;
+    }
+    get footerTemplate() {
+      return html`<footer>footer</footer>`;
+    }
+  }
+
+  This template is better
+  import './my-header.js';
+  import './my-article.js';
+  import './my-footer.js';
+
+  class MyPage extends LitElement {
+    render() {
+      return html`
+        <my-header></my-header>
+        <my-article></my-article>
+        <my-footer></my-footer>
+      `;
+    }
+  }
+
+  //
+  Template syntax cheat sheet
+    Render
+      render() { return html`<p>template</p>`; }
+    
+    Properties, loops, conditionals
+      // Property
+      html`<p>${this.myProp}</p>`;
+
+      // Loop 
+        html`${this.myArray.map(i => html`<li>${i}</li>`;)}`;
+
+      // Conditional
+        html`${this.myBool?html`<p>foo</p>`:html`<p>bar</p>`}`;
+    
+    Data bindings
+      // Attribute
+      html`<p id="${...}">`;
+
+      // Boolean attribute
+      html`<input type="checkbox" ?checked="${...}">`;
+
+      // Property
+      html`<input .value="${...}">`;
+
+      // Event handler 
+      html`<button @click="${this.doStuff}"></button>`;
+    
+    Composition
+      // From multiple templates on same class
+      render() {
+        return html`
+          ${this.headerTemplate}
+          <article>article</article>
+        `;
+      }
+      get headerTemplate() {
+        return html`<header>header</header>`;
+      }
+
+      // By importing elements
+      import './my-header.js';
+
+      class MyPage extends LitElement{
+        render() {
+          return html`
+            <my-header></my-header>
+            <article>article</article>
+          `;
+        }
+      }
+
+    Slots
+      render() { return html`<slot name="thing"></slot>`; }
+      <my-element>
+        <p slot="thing">stuff</p>
+      </my-element>
+*/
