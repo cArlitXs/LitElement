@@ -10,7 +10,7 @@
 
 
 // Import LitElement base class and html helper function
-import { LitElement, html } from 'lit-element';
+import { LitElement, html, css } from 'lit-element';
 //import { LazyElement } from './lazy-element.js';
 import './list-app.js';
 
@@ -35,6 +35,12 @@ export class StartLitElement extends LitElement {
         observer: 'addedChanged'
       },
     };
+  }
+  static get styles() {
+    return css`
+      :host { display: block; font-family: 'Arial', sans-serif; }
+      :host([hidden]) { display: none; }
+    `;
   }
 
   /**  
@@ -64,10 +70,8 @@ export class StartLitElement extends LitElement {
    */
   render() {
     return html`
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
       <style>
-        :host { display: block; font-family: 'Arial', sans-serif; }
-        :host([hidden]) { display: none; }
+        @import "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css";
       </style>
 
       <h1>Start LitElement!</h1>
@@ -314,4 +318,46 @@ customElements.define('start-lit-element', StartLitElement);
       <my-element>
         <p slot="thing">stuff</p>
       </my-element>
+  
+  //
+  CSS in a Slot
+  ::slotted(*) matches all slotted elements.
+  ::slotted(p) matches slotted paragraphs.
+  p ::slotted(*) matches slotted elements in a paragraph element.
+
+  //
+  ¡¡If you implement a static properties getter, initialize your property values in the element constructor!!.
+  constructor() {
+    // Always call super() first
+    super();
+    this.prop1 = 'Hello World';
+    ...
+  }
+  Remember to call super() first in your constructor, or your element won’t render at all.
+
+  //
+  Interfaz de elementos para usar de forma nativa del navegador
+  https://html.spec.whatwg.org/multipage/indices.html#element-interfaces
+  class FancyButton extends HTMLButtonElement {
+    constructor() {
+      super(); // always call super() first in the constructor.
+      this.addEventListener('click', e => this.drawRipple(e.offsetX, e.offsetY));
+    }
+
+    // Material design ripple animation.
+    drawRipple(x, y) {
+      let div = document.createElement('div');
+      div.classList.add('ripple');
+      this.appendChild(div);
+      div.style.top = `${y - div.clientHeight/2}px`;
+      div.style.left = `${x - div.clientWidth/2}px`;
+      div.style.backgroundColor = 'currentColor';
+      div.classList.add('run');
+      div.addEventListener('transitionend', e => div.remove());
+    }
+  }
+  customElements.define('fancy-button', FancyButton, {extends: 'button'});
+
+  //
+
 */
